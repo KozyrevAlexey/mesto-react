@@ -27,7 +27,7 @@ React.useEffect(() => {
 return (
   <main className="main">
   <section className="profile">
-    <div class="profile__avatar" onClick={onEditAvatar}>
+    <div className="profile__avatar" onClick={onEditAvatar}>
       <img src={userAvatar} alt={userName} className="profile__img" />
     </div>
     <div className="profile-info">
