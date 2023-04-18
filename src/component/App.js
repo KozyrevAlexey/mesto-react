@@ -46,6 +46,7 @@ function App() {
         onCardClick={handleCardClick}
       />
       <Footer />
+
       <PopupWithForm
       name="avatar"
       title="Обновить аватар"
@@ -62,6 +63,66 @@ function App() {
         <span id="input-avatar-error" className="popup__error"></span>
       </label>
       </PopupWithForm>
+
+      <PopupWithForm
+      name="profile"
+      title="Редактировать профиль"
+      isOpen={isEditProfilePopupOpen}
+      onClose={closeAllPopups}>
+      <label className="popup__form">
+      <input
+        id="input-name"
+        type="text"
+        name="name"
+        className="popup__input popup__input_type_name"
+        placeholder="Укажите имя"
+        minLength="2"
+        maxLength="40"
+        required />
+        <span id="input-name-error" className="popup__error"></span>
+        <input
+        id="input-job"
+        type="text"
+        name="about"
+        className="popup__input popup__input_type_job"
+        placeholder="Укажите професcию"
+        minLength="2"
+        maxLength="200"
+        required />
+        <span id="input-job-error" className="popup__error"></span>
+      </label>
+      </PopupWithForm>
+
+      <PopupWithForm
+      name="place"
+      title="Новое место"
+      isOpen={isAddPlacePopupOpen}
+      onClose={closeAllPopups}>
+        <input
+        id="input-title"
+        type="text"
+        name="name"
+        className="popup__input popup__input_type_title"
+        placeholder="Название"
+        minLength="2"
+        maxLength="30"
+        required />
+        <span id="input-title-error" className="popup__error"></span>
+        <input
+        id="input-link"
+        type="url"
+        name="link"
+        className="popup__input popup__input_type_link"
+        placeholder="Ссылка на картинку"
+        required />
+        <span id="input-link-error" className="popup__error"></span>
+      </PopupWithForm>
+
+      <ImagePopup
+      card={selectedCard}
+      isOpen={isImagePopupOpen}
+      onClose={closeAllPopups}>
+      </ImagePopup>
 
     </div>
   )
