@@ -1,26 +1,27 @@
 import React from "react";
-import { api } from "../utils/api";
+import { api } from "../utilis/api";
 import Card from "./Card";
 
 function Main({
   onEditProfile,
   onAddPlace,
   onEditAvatar,
-  onCardClick}) {
-  const [userName, setUserName] = React.useState('');
-  const [userDescription, setUserDescription] = React.useState('');
-  const [userAvatar, setUserAvatar] = React.useState('');
-  const [cards, setCards] = React.useState([]);
+  onCardClick
+}) {
+const [userName, setUserName] = React.useState('');
+const [userDescription, setUserDescription] = React.useState('');
+const [userAvatar, setUserAvatar] = React.useState('');
+const [cards, setCards] = React.useState([]);
 
 React.useEffect(() => {
   Promise.all([api.getUserInfoApi(), api.getInitialCards()])
-.then(([user, card]) => {
-  setUserName(user.name);
-  setUserDescription(user.about);
-  setUserAvatar(user.avatar);
-  setCards(card);
-})
-.catch((err) => alert(err))
+  .then(([user, card]) => {
+    setUserName(user.name);
+    setUserDescription(user.about);
+    setUserAvatar(user.avatar);
+    setCards(card);
+  })
+  .catch((err) => alert(err))
 }, [])
 
 return (
@@ -48,7 +49,6 @@ return (
   </section>
 </main>
 )
-
 }
 
 export default Main;
