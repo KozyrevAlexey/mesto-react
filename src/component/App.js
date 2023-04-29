@@ -4,6 +4,7 @@ import Main from "./Main";
 import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
+import EditProfilePopup from "./EditProfilePopup";
 
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utilis/api";
@@ -68,6 +69,15 @@ function App() {
       })
   }
 
+  function handleUpdateUser(value) {
+    api
+      .setUserInfoApi(value)
+      .then((res) => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
@@ -82,6 +92,12 @@ function App() {
           cards={cards}
         />
         <Footer />
+
+        <EditProfilePopup
+          isOpen={isEditProfilePopupOpen}
+          onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}
+        />
 
         <PopupWithForm
           name="avatar"
@@ -100,7 +116,7 @@ function App() {
           </label>
         </PopupWithForm>
 
-        <PopupWithForm
+        {/* <PopupWithForm
           name="profile"
           title="Редактировать профиль"
           isOpen={isEditProfilePopupOpen}
@@ -127,7 +143,7 @@ function App() {
               required />
             <span id="input-job-error" className="popup__error"></span>
           </label>
-        </PopupWithForm>
+        </PopupWithForm> */}
 
         <PopupWithForm
           name="place"
