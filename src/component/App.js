@@ -18,13 +18,13 @@ function App() {
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
-  Promise.all([api.getUserInfoApi(), api.getInitialCards()])
-  .then(([user, card]) => {
-    setCurrentUser(user);
-    setCards(card);
-  })
-  .catch((err) => alert(err))
-}, []);
+    Promise.all([api.getUserInfoApi(), api.getInitialCards()])
+      .then(([user, card]) => {
+        setCurrentUser(user);
+        setCards(card);
+      })
+      .catch((err) => alert(err))
+  }, []);
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -50,10 +50,23 @@ function App() {
     setIsImagePopupOpen(true);
   }
 
-  // function handleCardDelete(card) {
-  //   handleDeleteClick(card);
-  //   setSelectedCard(card);
-  // }
+  function handleCardLike(card) {
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    api
+      .changeLikeCardStatus(card._id, isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((c) => c._id === card._id ? newCard : c));
+      });
+  }
+
+  function handleCardDelete(card) {
+    api
+      .deleteCard(card._id)
+      .then(() => {
+        setCards(state => state.filter((c) => c._id !== card._id));
+      })
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -64,8 +77,9 @@ function App() {
           onEditProfile={hendleEditProfileClick}
           onAddPlace={hendleAddPlaceClick}
           onCardClick={handleCardClick}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
           cards={cards}
-          // onCardDelete={handleCardDelete}
         />
         <Footer />
 
