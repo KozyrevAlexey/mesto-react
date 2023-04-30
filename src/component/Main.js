@@ -12,21 +12,6 @@ function Main({
   cards
 }) {
   const currentUser = useContext(CurrentUserContext);
-  // const [userName, setUserName] = React.useState('');
-  // const [userDescription, setUserDescription] = React.useState('');
-  // const [userAvatar, setUserAvatar] = React.useState('');
-  // const [cards, setCards] = React.useState([]);
-
-  // React.useEffect(() => {
-  //   Promise.all([api.getUserInfoApi(), api.getInitialCards()])
-  //   .then(([user, card]) => {
-  //     setUserName(user.name);
-  //     setUserDescription(user.about);
-  //     setUserAvatar(user.avatar);
-  //     setCards(card);
-  //   })
-  //   .catch((err) => alert(err))
-  // }, [])
 
   return (
     <main className="main">
