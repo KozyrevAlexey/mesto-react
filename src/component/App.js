@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
+import EditAvatarPopup from "./EditAvatarPopup";
 
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utilis/api";
@@ -78,6 +79,16 @@ function App() {
       })
   }
 
+  function handleUpdateAvatar(value) {
+    api
+      .setUserAvatar(value)
+      .then((res) => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
@@ -93,13 +104,18 @@ function App() {
         />
         <Footer />
 
+        <EditAvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          onClose={closeAllPopups}
+          onUpdateAvatar={handleUpdateAvatar} />
+
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
         />
 
-        <PopupWithForm
+        {/* <PopupWithForm
           name="avatar"
           title="Обновить аватар"
           isOpen={isEditAvatarPopupOpen}
@@ -114,7 +130,7 @@ function App() {
               required />
             <span id="input-avatar-error" className="popup__error"></span>
           </label>
-        </PopupWithForm>
+        </PopupWithForm> */}
 
         {/* <PopupWithForm
           name="profile"
