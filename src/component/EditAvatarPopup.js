@@ -3,11 +3,7 @@ import PopupWithForm from "./PopupWithForm";
 
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function EditAvatarPopup({
-  isOpen,
-  onClose,
-  onUpdateAvatar
-}) {
+function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar}) {
   const currentUser = useContext(CurrentUserContext);
   const inputAvatar = useRef();
 
@@ -28,7 +24,8 @@ function EditAvatarPopup({
       title="Обновить аватар"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      buttonText="Сохранить">
 
       <label className="popup__form">
         <input

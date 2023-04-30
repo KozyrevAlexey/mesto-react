@@ -3,11 +3,7 @@ import PopupWithForm from "./PopupWithForm";
 
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function EditProfilePopup({
-  isOpen,
-  onClose,
-  onUpdateUser
-}) {
+function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   const currentUser = useContext(CurrentUserContext);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -28,7 +24,8 @@ function EditProfilePopup({
       title="Редактировать профиль"
       isOpen={isOpen}
       onClose={onClose}
-      onSubmit={handleSubmit}>
+      onSubmit={handleSubmit}
+      buttonText="Сохранить">
       <label className="popup__form">
         <input
           id="input-name"
