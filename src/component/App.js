@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -12,15 +12,15 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utilis/api";
 
 function App() {
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({});
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [cards, setCards] = React.useState([]);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     Promise.all([api.getUserInfoApi(), api.getInitialCards()])
       .then(([user, card]) => {
         setCurrentUser(user);
@@ -60,7 +60,8 @@ function App() {
       .then((newCard) => {
         setCards((state) =>
           state.map((c) => c._id === card._id ? newCard : c));
-      });
+      })
+      .catch((err) => alert(err));
   }
 
   function handleCardDelete(card) {
@@ -69,6 +70,7 @@ function App() {
       .then(() => {
         setCards(state => state.filter((c) => c._id !== card._id));
       })
+      .catch((err) => alert(err));
   }
 
   function handleUpdateUser(value) {
@@ -78,6 +80,7 @@ function App() {
         setCurrentUser(res);
         closeAllPopups();
       })
+      .catch((err) => alert(err));
   }
 
   function handleUpdateAvatar(value) {
@@ -87,6 +90,7 @@ function App() {
         setCurrentUser(res);
         closeAllPopups();
       })
+      .catch((err) => alert(err));
   }
 
   function handleAddPlaceSubmit(card) {
@@ -96,7 +100,9 @@ function App() {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
+      .catch((err) => alert(err));
   }
+
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
