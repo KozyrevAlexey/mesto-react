@@ -19,6 +19,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [isPreloading, setIsPreloading] = useState(false);
 
   useEffect(() => {
     Promise.all([api.getUserInfoApi(), api.getInitialCards()])
@@ -65,44 +66,51 @@ function App() {
   }
 
   function handleCardDelete(card) {
+    setIsPreloading(true)
     api
       .deleteCard(card._id)
       .then(() => {
         setCards(state => state.filter((c) => c._id !== card._id));
       })
-      .catch((err) => alert(err));
+      .catch((err) => alert(err))
+      .finally(() => setIsPreloading(false))
   }
 
   function handleUpdateUser(value) {
+    setIsPreloading(true)
     api
       .setUserInfoApi(value)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
       })
-      .catch((err) => alert(err));
+      .catch((err) => alert(err))
+      .finally(() => setIsPreloading(false))
   }
 
   function handleUpdateAvatar(value) {
+    setIsPreloading(true)
     api
       .setUserAvatar(value)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
       })
-      .catch((err) => alert(err));
+      .catch((err) => alert(err))
+      .finally(() => setIsPreloading(false))
   }
 
   function handleAddPlaceSubmit(card) {
+    setIsPreloading(true);
     api
       .addNewCard(card)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
-      .catch((err) => alert(err));
+      .catch((err) => alert(err))
+      .finally(() => setIsPreloading(false))
   }
-
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -123,18 +131,21 @@ function App() {
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
+          isPreloading={isPreloading}
         />
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
+          isPreloading={isPreloading}
         />
 
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
+          isPreloading={isPreloading}
         />
 
         <ImagePopup
