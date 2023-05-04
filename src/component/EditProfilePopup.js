@@ -3,7 +3,7 @@ import PopupWithForm from "./PopupWithForm";
 
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function EditProfilePopup({ isOpen, onClose, onUpdateUser, isPreloading }) {
+function EditProfilePopup({ isOpen, onClose, onUpdateUser, isPreloading, onOverlayClose }) {
   const currentUser = useContext(CurrentUserContext);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -25,7 +25,8 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isPreloading }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-      buttonText={isPreloading ? "Загрузка..." : "Сохранить"}>
+      buttonText={isPreloading ? "Загрузка..." : "Сохранить"}
+      onOverlayClose={onOverlayClose}>
       <label className="popup__form">
         <input
           id="input-name"

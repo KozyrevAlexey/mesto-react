@@ -3,7 +3,7 @@ import PopupWithForm from "./PopupWithForm";
 
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isPreloading}) {
+function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isPreloading, onOverlayClose}) {
   const currentUser = useContext(CurrentUserContext);
   const inputAvatar = useRef();
 
@@ -25,7 +25,8 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isPreloading}) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
-      buttonText={isPreloading ? "Загрузка..." : "Сохранить"}>
+      buttonText={isPreloading ? "Загрузка..." : "Сохранить"}
+      onOverlayClose={onOverlayClose}>
 
       <label className="popup__form">
         <input

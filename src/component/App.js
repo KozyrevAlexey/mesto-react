@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-// import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -66,14 +65,12 @@ function App() {
   }
 
   function handleCardDelete(card) {
-    setIsPreloading(true)
     api
       .deleteCard(card._id)
       .then(() => {
         setCards(state => state.filter((c) => c._id !== card._id));
       })
       .catch((err) => alert(err))
-      .finally(() => setIsPreloading(false))
   }
 
   function handleUpdateUser(value) {
@@ -112,6 +109,12 @@ function App() {
       .finally(() => setIsPreloading(false))
   }
 
+  function handleOverlayClose(evt) {
+    if (evt.target.classList.contains('popup')) {
+      closeAllPopups();
+    }
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
@@ -132,6 +135,7 @@ function App() {
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
           isPreloading={isPreloading}
+          onOverlayClose={handleOverlayClose}
         />
 
         <EditProfilePopup
@@ -139,6 +143,7 @@ function App() {
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
           isPreloading={isPreloading}
+          onOverlayClose={handleOverlayClose}
         />
 
         <AddPlacePopup
@@ -146,13 +151,15 @@ function App() {
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
           isPreloading={isPreloading}
+          onOverlayClose={handleOverlayClose}
         />
 
         <ImagePopup
           card={selectedCard}
           isOpen={isImagePopupOpen}
-          onClose={closeAllPopups}>
-        </ImagePopup>
+          onClose={closeAllPopups}
+          onOverlayClose={handleOverlayClose} />
+        {/* </ImagePopup> */}
 
       </div>
     </CurrentUserContext.Provider>
