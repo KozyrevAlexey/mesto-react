@@ -1,8 +1,7 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-// import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -12,15 +11,16 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utilis/api";
 
 function App() {
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({});
-  const [currentUser, setCurrentUser] = React.useState({});
-  const [cards, setCards] = React.useState([]);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
+  const [isPreloading, setIsPreloading] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     Promise.all([api.getUserInfoApi(), api.getInitialCards()])
       .then(([user, card]) => {
         setCurrentUser(user);
@@ -60,7 +60,8 @@ function App() {
       .then((newCard) => {
         setCards((state) =>
           state.map((c) => c._id === card._id ? newCard : c));
-      });
+      })
+      .catch((err) => alert(err));
   }
 
   function handleCardDelete(card) {
@@ -69,33 +70,49 @@ function App() {
       .then(() => {
         setCards(state => state.filter((c) => c._id !== card._id));
       })
+      .catch((err) => alert(err))
   }
 
   function handleUpdateUser(value) {
+    setIsPreloading(true)
     api
       .setUserInfoApi(value)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
       })
+      .catch((err) => alert(err))
+      .finally(() => setIsPreloading(false))
   }
 
   function handleUpdateAvatar(value) {
+    setIsPreloading(true)
     api
       .setUserAvatar(value)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
       })
+      .catch((err) => alert(err))
+      .finally(() => setIsPreloading(false))
   }
 
   function handleAddPlaceSubmit(card) {
+    setIsPreloading(true);
     api
       .addNewCard(card)
       .then((newCard) => {
         setCards([newCard, ...cards]);
         closeAllPopups();
       })
+      .catch((err) => alert(err))
+      .finally(() => setIsPreloading(false))
+  }
+
+  function handleOverlayClose(evt) {
+    if (evt.target.classList.contains('popup')) {
+      closeAllPopups();
+    }
   }
 
   return (
@@ -117,25 +134,32 @@ function App() {
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
+          isPreloading={isPreloading}
+          onOverlayClose={handleOverlayClose}
         />
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
+          isPreloading={isPreloading}
+          onOverlayClose={handleOverlayClose}
         />
 
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
+          isPreloading={isPreloading}
+          onOverlayClose={handleOverlayClose}
         />
 
         <ImagePopup
           card={selectedCard}
           isOpen={isImagePopupOpen}
-          onClose={closeAllPopups}>
-        </ImagePopup>
+          onClose={closeAllPopups}
+          onOverlayClose={handleOverlayClose} />
+        {/* </ImagePopup> */}
 
       </div>
     </CurrentUserContext.Provider>
